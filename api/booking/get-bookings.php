@@ -17,33 +17,32 @@
 	$result = $booking->read();
 
 	// Get row count
-	$num = $result->rowCount();
+	$number = $result->rowCount();
 
-	// Check if any posts
-	if($num > 0) {
+	// Check if any bookings
+	if($number > 0) {
 
 		// Bookings array
-		$bookings_arr = array();
+		$bookings_array = array();
 
 		while($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			extract($row);
 
 			$booking_item = array(
-				'id' => $id,
-				'customer_id' => $customer_id,
-				'date' => $date,
-				'time' => $time,
-				'number_of_guests' => $number_of_guests,
-				'customer_name' => $customer_name
+				'booking_id' => $id,
+				'booking_date' => $date,
+				'sitting_time' => $time,
+				'number_of_guests_at_table' => $number_of_guests,
+				'name_on_booking' => $customer_name
 			);
 
 			// Push to "data"
-			array_push($bookings_arr, $booking_item);
+			array_push($bookings_array, $booking_item);
 
 		}
 
 		// Turn to JSON & output
-		echo json_encode($bookings_arr);
+		echo json_encode($bookings_array);
 
 	} else {
 		

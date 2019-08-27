@@ -4,14 +4,6 @@
 	private $connection;
 	private $table = 'booking';
 
-	// Booking Properties
-	public $id;
-	public $customer_id;
-	public $date;
-	public $time;
-	public $number_of_guests;
-	public $customer_name;
-
 	// Constructor with DB
 	public function __construct($db) {
 		$this->connection = $db;
@@ -24,7 +16,6 @@
 		$query = 'SELECT 
 			c.name as customer_name, 
 			b.id, 
-			b.customer_id, 
 			b.date, 
 			b.time, 
 			b.number_of_guests 
@@ -36,12 +27,12 @@
 			b.date DESC';
 
 		// Prepare statement
-		$stmt = $this->connection->prepare($query);
+		$statement = $this->connection->prepare($query);
 
 		// Execute query
-		$stmt->execute();
+		$statement->execute();
 
-		return $stmt;
+		return $statement;
 	}
 }
 

@@ -17,6 +17,5 @@
 			echo 'Connection Error: ' . $e->getMessage();
 		}
 		return $this->connection;
-	}
+	}	
 }
-
