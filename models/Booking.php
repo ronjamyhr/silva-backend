@@ -43,6 +43,23 @@
 
 		return $stmt;
 	}
+
+	public function getBookingsOnTime($date, $time) {
+
+		$query = 'SELECT * FROM booking WHERE date = :date AND time = :time';
+
+		$statement = $this->connection->prepare($query);
+
+        $statement->execute(
+            [
+				":date" => $date,
+				":time" => $time
+            ]
+		);
+		
+		return $statement;
+			
+	}
 }
 
 
