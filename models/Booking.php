@@ -33,7 +33,32 @@
 		$statement->execute();
 
 		return $statement;
-	}
+    }
+    
+    public function compareCustomerEmail($email) {
+
+        $query = 'SELECT * FROM customer WHERE email = :email';
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute([":email" => $email]);
+        return $statement;
+    }
+
+    // public function getCustomerId() {
+
+    // }
+
+    public function registerNewCustomer($email, $name, $phone_number,) {
+
+    }
+
+    public function bookTableNewCustomer() {
+
+    }
+
+    public function bookTableExistingCustomer($customerId, $time, $date, ) {
+
+    }
 }
 
 
