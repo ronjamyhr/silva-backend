@@ -9,11 +9,9 @@
 	include_once '../../configuration/Database.php';
 	include_once '../../models/Booking.php';
 
-	// Instantiate DB & connect
 	$database = new Database();
 	$db = $database->connect();
 
-	// Instantiate booking object
     $booking = new Booking($db);
 
     if($booking->registerCustomer('nisse', 'nisse@hejhopp.se', 0705647635)) {

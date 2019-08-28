@@ -2,7 +2,9 @@
 	class Booking {
 
 	private $connection;
-	private $table = 'booking';
+    private $table = 'booking';
+    
+    private $customer_id;
 
 	// Constructor with DB
 	public function __construct($db) {
@@ -43,10 +45,13 @@
         $statement->execute([':email' => $email]);
         return $statement;
     }
-
-    // public function getCustomerId() {
-
-    // }
+    
+    public function getCustomerId() {
+        $query = 'SELECT id FROM customer ORDER BY id DESC  LIMIT 1';
+        $statement = $this->connection->prepare($query);
+        $statement->execute();
+        return $statement;
+    }
 
     public function registerCustomer($name, $email, $phone_number) {
         $query = 'INSERT INTO customer (name, email, phone_number) VALUES (:name, :email, :phone_number)';
@@ -54,22 +59,15 @@
         $statement = $this->connection->prepare($query);
         $statement->execute([':name' => $name, ':email' => $email, ':phone_number' => $phone_number]);
         return $statement;
-
-
     }
 
-    public function bookTableNewCustomer() {
-
-    }
-
-    public function bookTableExistingCustomer($customerId, $date, $time, $number_of_guests) {
+    public function bookTable($customerId, $date, $time, $number_of_guests) {
         $query = 'INSERT INTO booking (customer_id, date, time, number_of_guests) VALUES (:customer_id, :date, :time, :number_of_guests)';
 
         $statement = $this->connection->prepare($query);
         $statement->execute([':customer_id' => $customerId, ':date' => $date, ':time' => $time, ':number_of_guests' => $number_of_guests
         ]);
         return $statement;
-
     }
 }
 
