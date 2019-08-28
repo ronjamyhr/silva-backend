@@ -10,7 +10,7 @@
 	// Instantiate booking object
 	$booking = new Booking($db);
 
-	$result = $booking->getBookingsOnTime('2019-08-28 00:00:00', 19);
+	$result = $booking->getBookingsOnTime($_GET['date'], $_GET['time']);
 
 	$fetched_result = $result->fetchAll(PDO::FETCH_ASSOC);
 	// Get row count
