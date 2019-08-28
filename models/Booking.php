@@ -40,7 +40,7 @@
         $query = 'SELECT * FROM customer WHERE email = :email';
 
         $statement = $this->connection->prepare($query);
-        $statement->execute([":email" => $email]);
+        $statement->execute([':email' => $email]);
         return $statement;
     }
 
@@ -48,7 +48,13 @@
 
     // }
 
-    public function registerNewCustomer($email, $name, $phone_number,) {
+    public function registerCustomer($name, $email, $phone_number) {
+        $query = 'INSERT INTO customer (name, email, phone_number) VALUES (:name, :email, :phone_number)';
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute([':name' => $name, ':email' => $email, ':phone_number' => $phone_number]);
+        return $statement;
+
 
     }
 
@@ -56,7 +62,13 @@
 
     }
 
-    public function bookTableExistingCustomer($customerId, $time, $date, ) {
+    public function bookTableExistingCustomer($customerId, $date, $time, $number_of_guests) {
+        $query = 'INSERT INTO booking (customer_id, date, time, number_of_guests) VALUES (:customer_id, :date, :time, :number_of_guests)';
+
+        $statement = $this->connection->prepare($query);
+        $statement->execute([':customer_id' => $customerId, ':date' => $date, ':time' => $time, ':number_of_guests' => $number_of_guests
+        ]);
+        return $statement;
 
     }
 }
