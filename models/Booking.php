@@ -4,7 +4,13 @@
 	private $connection;
     private $table = 'booking';
     
-    private $customer_id;
+    public $customer_id;
+    public $name;
+    public $email;
+    public $phone_number;
+    public $date;
+    public $time;
+    public $number_of_guests;
 
 	// Constructor with DB
 	public function __construct($db) {
@@ -37,12 +43,12 @@
 		return $statement;
     }
     
-    public function compareCustomerEmail($email) {
-
+    public function compareCustomerEmail() {
         $query = 'SELECT * FROM customer WHERE email = :email';
 
         $statement = $this->connection->prepare($query);
-        $statement->execute([':email' => $email]);
+        $statement->bindParam(':email', $this->email);
+        $statement->execute();
         return $statement;
     }
     
@@ -53,21 +59,49 @@
         return $statement;
     }
 
-    public function registerCustomer($name, $email, $phone_number) {
-        $query = 'INSERT INTO customer (name, email, phone_number) VALUES (:name, :email, :phone_number)';
+    public function registerCustomer() {
+        $query = 'INSERT INTO customer (name, email) VALUES (:name, :email)';
 
         $statement = $this->connection->prepare($query);
-        $statement->execute([':name' => $name, ':email' => $email, ':phone_number' => $phone_number]);
-        return $statement;
+
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        // $this->phone_number = htmlspecialchars(strip_tags($this->phone_number));
+
+        $statement->bindParam(':name', $this->name);
+        $statement->bindParam(':email', $this->email);
+        // $statement->bindParam(':phone_number', $this->phone_number);
+
+        if($statement->execute()) {
+            return true;
+        }
+
+        printf("Error: %s.\n", $statement->error);
+        return false;
     }
 
-    public function bookTable($customerId, $date, $time, $number_of_guests) {
+    public function bookTable() {
         $query = 'INSERT INTO booking (customer_id, date, time, number_of_guests) VALUES (:customer_id, :date, :time, :number_of_guests)';
 
         $statement = $this->connection->prepare($query);
-        $statement->execute([':customer_id' => $customerId, ':date' => $date, ':time' => $time, ':number_of_guests' => $number_of_guests
-        ]);
-        return $statement;
+
+        $this->customer_id = htmlspecialchars(strip_tags($this->customer_id));
+        $this->date = htmlspecialchars(strip_tags($this->date));
+        $this->time = htmlspecialchars(strip_tags($this->time));
+        $this->number_of_guests = htmlspecialchars(strip_tags($this->number_of_guests));
+
+        $statement->bindParam(':customer_id', $this->customer_id);
+        $statement->bindParam(':date', $this->date);
+        $statement->bindParam(':time', $this->time);
+        $statement->bindParam(':number_of_guests', $this->number_of_guests);
+
+        if($statement->execute()) {
+            return true;
+        }
+
+        printf("Error: %s.\n", $statement->error);
+        return false;
+    
     }
 }
 

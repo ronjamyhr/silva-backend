@@ -14,7 +14,16 @@
 
     $booking = new Booking($db);
 
-    $email_result = $booking->compareCustomerEmail('bert_fjert@enmail.se');
+    $data = json_decode(file_get_contents("php://input"));
+
+    $booking->email = $data->email;
+    $booking->name = $data->name;
+    $booking->phone_number = $data->phone_number;
+    $booking->number_of_guests = $data->number_of_guests;
+    $booking->date = $data->date;
+    $booking->time = $data->time;
+    
+    $email_result = $booking->compareCustomerEmail();
 
     $row_count = $email_result->rowCount();
 
@@ -29,19 +38,20 @@
             );
         }
         
-        // echo json_encode($customerId);
-        $customer_id_from_db = (int)$customerId['customer_id'];
+        echo json_encode($customerId);
+
+        $booking->customer_id = (int)$customerId['customer_id'];
         
-        if($booking->bookTable($customer_id_from_db, '2019-08-28', 19, 5)) {
+        if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
         } else {
             echo json_encode(array('message' => 'Could not book table'));
         }
-
-
+        
+        
 	} else {
 
-        if($booking->registerCustomer('anna', 'nanna@hejhopp.se', 07057635)) {
+        if($booking->registerCustomer()) {
             echo json_encode(array('message' => 'Customer registered'));
         } else {
             echo json_encode(array('message' => 'Could not register new customer'));
@@ -52,9 +62,9 @@
 
         echo json_encode(array('last_customer_id' => $customer_id_result));
 
-        $new_customer_id = (int)$customer_id_result['id'];
+        $booking->customer_id = (int)$customer_id_result['id'];
 
-        if($booking->bookTable($new_customer_id, '2019-09-10', 21, 5)) {
+        if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
         } else {
             echo json_encode(array('message' => 'Could not book table'));
