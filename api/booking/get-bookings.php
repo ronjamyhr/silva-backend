@@ -33,7 +33,8 @@
 				'booking_date' => $date,
 				'sitting_time' => $time,
 				'number_of_guests_at_table' => $number_of_guests,
-				'name_on_booking' => $customer_name
+				'name_on_booking' => $customer_name,
+				'email_on_booking' => $email
 			);
 
 			// Push to "data"
