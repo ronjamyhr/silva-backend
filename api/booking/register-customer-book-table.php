@@ -69,7 +69,6 @@
         } else {
             echo json_encode(array('message' => 'Could not book table'));
         }
-
     
     }
 
