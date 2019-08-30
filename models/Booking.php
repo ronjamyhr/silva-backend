@@ -61,17 +61,17 @@
     }
 
     public function registerCustomer() {
-        $query = 'INSERT INTO customer (name, email) VALUES (:name, :email)';
+        $query = 'INSERT INTO customer (name, email, phone_number) VALUES (:name, :email, :phone_number)';
 
         $statement = $this->connection->prepare($query);
 
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->email = htmlspecialchars(strip_tags($this->email));
-        // $this->phone_number = htmlspecialchars(strip_tags($this->phone_number));
+        $this->phone_number = htmlspecialchars(strip_tags($this->phone_number));
 
         $statement->bindParam(':name', $this->name);
         $statement->bindParam(':email', $this->email);
-        // $statement->bindParam(':phone_number', $this->phone_number);
+        $statement->bindParam(':phone_number', $this->phone_number);
 
         if($statement->execute()) {
             return true;
