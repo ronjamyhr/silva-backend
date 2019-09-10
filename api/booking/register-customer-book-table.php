@@ -27,6 +27,7 @@
 
     $row_count = $email_result->rowCount();
 
+
 	// Check if email exists
 	if($row_count > 0) {
 
@@ -37,8 +38,6 @@
 				'customer_id' => $id
             );
         }
-        
-        echo json_encode($customerId);
 
         $booking->customer_id = (int)$customerId['customer_id'];
         
