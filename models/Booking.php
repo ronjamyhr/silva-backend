@@ -4,6 +4,7 @@
 	private $connection;
     private $table = 'booking';
     
+    public $id;
     public $customer_id;
     public $name;
     public $email;
@@ -130,23 +131,32 @@
 	
 		return false;
 	}
-
-	public function getBookingsOnTime($date, $time) {
-
-		$query = 'SELECT * FROM booking WHERE date = :date AND time = :time';
-
-		$statement = $this->connection->prepare($query);
-
-        $statement->execute(
-            [
-				":date" => $date,
-				":time" => $time
-            ]
-		);
-		
-		return $statement;
-			
-	}
+    
+    public function update() {
+        // Create query
+        $query = 'UPDATE booking
+                  SET number_of_guests = :number_of_guests, time = :time, date = :date
+                  WHERE id = :id';
+        // Prepare statement
+        $stmt = $this->connection->prepare($query);
+        // Clean data
+        $this->number_of_guests = htmlspecialchars(strip_tags($this->number_of_guests));
+        $this->time = htmlspecialchars(strip_tags($this->time));
+        $this->date = htmlspecialchars(strip_tags($this->date));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        // Bind data
+        $stmt->bindParam(':number_of_guests', $this->number_of_guests);
+        $stmt->bindParam(':time', $this->time);
+        $stmt->bindParam(':date', $this->date);
+        $stmt->bindParam(':id', $this->id);
+        // Execute query
+        if($stmt->execute()) {
+          return true;
+        }
+        // Print error if something goes wrong
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+  }
 }
 
 

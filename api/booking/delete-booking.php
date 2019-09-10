@@ -17,7 +17,6 @@
     
     // Get raw booking data
     $data = json_decode(file_get_contents("php://input"));
-    
     // Set id to be deleted
     $booking->id = $data->id;
     
