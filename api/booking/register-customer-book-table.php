@@ -22,6 +22,15 @@
     $booking->number_of_guests = $data->number_of_guests;
     $booking->date = $data->date;
     $booking->time = $data->time;
+
+    $email = $data->email;
+    
+    $emailHeader = 'From: silva@mail.com';
+    $emailMessage = 'Tack ' . $booking->name . ' för din bokning! 
+    Vi på SILVA ser fram emot att servera dig och ditt sällskap den ' . $booking->date . ', klockan ' . $booking->time . '.
+    Varmt välkommen!';
+    $emailSubject = 'Bokningsbekräftelse';
+    $message = wordwrap($emailMessage,70);
     
     $email_result = $booking->compareCustomerEmail();
 
@@ -43,6 +52,7 @@
         
         if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
+            mail($email, $emailSubject, $message, $emailHeader);
         } else {
             echo json_encode(array('message' => 'Could not book table'));
         }
@@ -65,6 +75,7 @@
 
         if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
+            mail($email, $emailSubject, $message, $emailHeader);
         } else {
             echo json_encode(array('message' => 'Could not book table'));
         }
