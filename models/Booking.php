@@ -156,7 +156,18 @@
         // Print error if something goes wrong
         printf("Error: %s.\n", $stmt->error);
         return false;
-  }
+    }
+
+    public function getEmail() {
+        $query = 'SELECT customer.email FROM customer INNER JOIN booking WHERE (booking.id = :id) AND (booking.customer_id = customer.id) LIMIT 1';
+
+        $statement = $this->connection->prepare($query);
+        $statement->bindParam(':id', $this->id);
+        return $statement;
+
+    }
+
+
 }
 
 

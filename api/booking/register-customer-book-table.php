@@ -25,6 +25,7 @@
 
     $email = $data->email;
     
+    // Set confirmation email details
     $emailHeader = 'From: silva@mail.com';
     $emailMessage = 'Tack ' . $booking->name . ' för din bokning! 
     Vi på SILVA ser fram emot att servera dig och ditt sällskap den ' . $booking->date . ', klockan ' . $booking->time . '.
@@ -52,6 +53,7 @@
         
         if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
+            // Send confirmation email
             mail($email, $emailSubject, $message, $emailHeader);
         } else {
             echo json_encode(array('message' => 'Could not book table'));
@@ -75,6 +77,7 @@
 
         if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
+            // Send confirmation email
             mail($email, $emailSubject, $message, $emailHeader);
         } else {
             echo json_encode(array('message' => 'Could not book table'));

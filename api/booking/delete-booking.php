@@ -19,12 +19,23 @@
     $data = json_decode(file_get_contents("php://input"));
     // Set id to be deleted
     $booking->id = $data->id;
+
+    // $result = $booking->getEmail();
+    // $email->fetch(PDO::FETCH_ASSOC);
+
+    // // Set confirmation email details
+    // $emailHeader = 'From: silva@mail.com';
+    // $emailMessage = 'Din avbokning är registrerad!';
+    // $emailSubject = 'Avbokningsbekräftelse';
+    // $message = wordwrap($emailMessage,70);
     
     // Delete booking
     if($booking->delete()) {
         echo json_encode(
             array('message' => 'Booking deleted')
         );
+        // Send confirmation email
+        // mail($email, $emailSubject, $message, $emailHeader);
     } else {
         echo json_encode(
             array('message' => 'Booking not deleted')
