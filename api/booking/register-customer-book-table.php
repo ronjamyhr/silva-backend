@@ -22,10 +22,21 @@
     $booking->number_of_guests = $data->number_of_guests;
     $booking->date = $data->date;
     $booking->time = $data->time;
+
+    $email = $data->email;
+    
+    // Set confirmation email details
+    $emailHeader = 'From: silva@mail.com';
+    $emailMessage = 'Tack ' . $booking->name . ' för din bokning! 
+    Vi på SILVA ser fram emot att servera dig och ditt sällskap den ' . $booking->date . ', klockan ' . $booking->time . '.
+    Varmt välkommen!';
+    $emailSubject = 'Bokningsbekräftelse';
+    $message = wordwrap($emailMessage,70);
     
     $email_result = $booking->compareCustomerEmail();
 
     $row_count = $email_result->rowCount();
+
 
 	// Check if email exists
 	if($row_count > 0) {
@@ -37,13 +48,13 @@
 				'customer_id' => $id
             );
         }
-        
-        echo json_encode($customerId);
 
         $booking->customer_id = (int)$customerId['customer_id'];
         
         if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
+            // Send confirmation email
+            mail($email, $emailSubject, $message, $emailHeader);
         } else {
             echo json_encode(array('message' => 'Could not book table'));
         }
@@ -66,10 +77,11 @@
 
         if($booking->bookTable()) {
             echo json_encode(array('message' => 'Table successfully booked'));
+            // Send confirmation email
+            mail($email, $emailSubject, $message, $emailHeader);
         } else {
             echo json_encode(array('message' => 'Could not book table'));
         }
-
     
     }
 

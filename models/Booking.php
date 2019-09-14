@@ -4,6 +4,7 @@
 	private $connection;
     private $table = 'booking';
     
+    public $id;
     public $customer_id;
     public $name;
     public $email;
@@ -61,17 +62,17 @@
     }
 
     public function registerCustomer() {
-        $query = 'INSERT INTO customer (name, email) VALUES (:name, :email)';
+        $query = 'INSERT INTO customer (name, email, phone_number) VALUES (:name, :email, :phone_number)';
 
         $statement = $this->connection->prepare($query);
 
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->email = htmlspecialchars(strip_tags($this->email));
-        // $this->phone_number = htmlspecialchars(strip_tags($this->phone_number));
+        $this->phone_number = htmlspecialchars(strip_tags($this->phone_number));
 
         $statement->bindParam(':name', $this->name);
         $statement->bindParam(':email', $this->email);
-        // $statement->bindParam(':phone_number', $this->phone_number);
+        $statement->bindParam(':phone_number', $this->phone_number);
 
         if($statement->execute()) {
             return true;
@@ -130,23 +131,43 @@
 	
 		return false;
 	}
+    
+    public function update() {
+        // Create query
+        $query = 'UPDATE booking
+                  SET number_of_guests = :number_of_guests, time = :time, date = :date
+                  WHERE id = :id';
+        // Prepare statement
+        $stmt = $this->connection->prepare($query);
+        // Clean data
+        $this->number_of_guests = htmlspecialchars(strip_tags($this->number_of_guests));
+        $this->time = htmlspecialchars(strip_tags($this->time));
+        $this->date = htmlspecialchars(strip_tags($this->date));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        // Bind data
+        $stmt->bindParam(':number_of_guests', $this->number_of_guests);
+        $stmt->bindParam(':time', $this->time);
+        $stmt->bindParam(':date', $this->date);
+        $stmt->bindParam(':id', $this->id);
+        // Execute query
+        if($stmt->execute()) {
+          return true;
+        }
+        // Print error if something goes wrong
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+    }
 
-	public function getBookingsOnTime($date, $time) {
+    public function getEmail() {
+        $query = 'SELECT customer.email FROM customer INNER JOIN booking WHERE (booking.id = :id) AND (booking.customer_id = customer.id) LIMIT 1';
 
-		$query = 'SELECT * FROM booking WHERE date = :date AND time = :time';
+        $statement = $this->connection->prepare($query);
+        $statement->bindParam(':id', $this->id);
+        return $statement;
 
-		$statement = $this->connection->prepare($query);
+    }
 
-        $statement->execute(
-            [
-				":date" => $date,
-				":time" => $time
-            ]
-		);
-		
-		return $statement;
-			
-	}
+
 }
 
 
